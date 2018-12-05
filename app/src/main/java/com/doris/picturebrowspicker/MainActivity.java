@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.doris.picture.library.brows.listener.SaveImageListener;
-import com.doris.picture.library.brows.utils.PictureBrows;
+import com.doris.picture.library.brows.PictureBrows;
 import com.doris.picture.library.picker.entity.PicturePickerMediaType;
 import com.doris.picture.library.picker.utils.PicturePicker;
 

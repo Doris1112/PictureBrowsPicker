@@ -1,4 +1,4 @@
-package com.doris.picture.library.brows.utils;
+package com.doris.picture.library.brows;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.doris.picture.library.PictureUtils;
 import com.doris.picture.library.brows.activity.PictureBrowsActivity;
 import com.doris.picture.library.brows.listener.SaveImageListener;
 
@@ -21,22 +22,6 @@ import java.util.List;
 public class PictureBrows {
 
     private static final String TAG = PictureBrows.class.getSimpleName();
-
-    /**
-     * 图片
-     */
-    public static final String EXTRA_IMAGE = "image";
-    public static final String EXTRA_POSITION = "imagePosition";
-    /**
-     * 是否可保存图片
-     */
-    public static final String EXTRA_SAVE = "imageSave";
-    public static final String EXTRA_SAVE_PATH = "imageSavePath";
-    public static final String EXTRA_SAVE_NAME = "imageSaveName";
-    /**
-     * 是否需要刷新媒体库
-     */
-    public static final String EXTRA_REFRESH = "imageRefresh";
 
     private Context mContext;
 
@@ -146,14 +131,14 @@ public class PictureBrows {
         PictureBrowsActivity.mSaveImageListener = mSaveImageListener;
 
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList(EXTRA_IMAGE, mImages);
-        bundle.putStringArrayList(EXTRA_SAVE_NAME, mNames);
+        bundle.putStringArrayList(PictureUtils.EXTRA_IMAGE, mImages);
+        bundle.putStringArrayList(PictureUtils.EXTRA_SAVE_NAME, mNames);
         Intent intent = new Intent(mContext, PictureBrowsActivity.class);
         intent.putExtras(bundle);
-        intent.putExtra(EXTRA_POSITION, mPosition);
-        intent.putExtra(EXTRA_SAVE, mIsSave);
-        intent.putExtra(EXTRA_SAVE_PATH, mSavePath);
-        intent.putExtra(EXTRA_REFRESH, mIsRefresh);
+        intent.putExtra(PictureUtils.EXTRA_POSITION, mPosition);
+        intent.putExtra(PictureUtils.EXTRA_SAVE, mIsSave);
+        intent.putExtra(PictureUtils.EXTRA_SAVE_PATH, mSavePath);
+        intent.putExtra(PictureUtils.EXTRA_REFRESH, mIsRefresh);
         mContext.startActivity(intent);
     }
 }

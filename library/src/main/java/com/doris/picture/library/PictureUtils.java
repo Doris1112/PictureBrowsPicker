@@ -1,4 +1,4 @@
-package com.doris.picture.library.utils;
+package com.doris.picture.library;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -30,12 +30,20 @@ public class PictureUtils {
     public static final int SAVE_STATUS_SUCCESS = 2;
     public static final int SAVE_STATUS_FAIL = 3;
 
-    public static final String EXTRA_IMAGE_URL = "extraImageUrl";
-    public static final String EXTRA_IMAGE_PATH = "extraImagePath";
+    public static final String EXTRA_IMAGE_URL = "imageUrl";
+    public static final String EXTRA_IMAGE_PATH = "imagePath";
+
+    public static final String EXTRA_IMAGE = "image";
+    public static final String EXTRA_POSITION = "imagePosition";
+    public static final String EXTRA_SAVE = "imageSave";
+    public static final String EXTRA_SAVE_PATH = "imageSavePath";
+    public static final String EXTRA_SAVE_NAME = "imageSaveName";
+    public static final String EXTRA_REFRESH = "imageRefresh";
 
     public static final int START_LENGTH = 4;
     public static final String START_HTTP = "http";
     public static final String START_DATA = "data";
+
 
     /**
      * 保存图片

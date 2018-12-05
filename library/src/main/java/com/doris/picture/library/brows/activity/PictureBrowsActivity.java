@@ -27,15 +27,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.doris.picture.library.R;
 import com.doris.picture.library.brows.adapter.PictureBrowsAdapter;
 import com.doris.picture.library.brows.listener.SaveImageListener;
-import com.doris.picture.library.brows.utils.PictureBrows;
-import com.doris.picture.library.utils.PictureUtils;
+import com.doris.picture.library.PictureUtils;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,19 +97,21 @@ public class PictureBrowsActivity extends AppCompatActivity {
             if (mNames != null && mNames.size() == mImages.size()) {
                 for (int i = 0; i < mNames.size(); i++) {
                     mSaveNames.put(mImages.get(i), mNames.get(i));
+                    setIsSaveFile(mImages.get(i), mNames.get(i));
                 }
             }
             showImages();
+            saveStatusUpdateUi(mPosition);
         }
     }
 
     private boolean initArgs(Intent intent) {
-        mImages = intent.getStringArrayListExtra(PictureBrows.EXTRA_IMAGE);
-        mNames = intent.getStringArrayListExtra(PictureBrows.EXTRA_SAVE_NAME);
-        mPosition = intent.getIntExtra(PictureBrows.EXTRA_POSITION, mPosition);
-        mIsSave = intent.getBooleanExtra(PictureBrows.EXTRA_SAVE, mIsSave);
-        mSavePath = intent.getStringExtra(PictureBrows.EXTRA_SAVE_PATH);
-        mIsRefresh = intent.getBooleanExtra(PictureBrows.EXTRA_REFRESH, mIsRefresh);
+        mImages = intent.getStringArrayListExtra(PictureUtils.EXTRA_IMAGE);
+        mNames = intent.getStringArrayListExtra(PictureUtils.EXTRA_SAVE_NAME);
+        mPosition = intent.getIntExtra(PictureUtils.EXTRA_POSITION, mPosition);
+        mIsSave = intent.getBooleanExtra(PictureUtils.EXTRA_SAVE, mIsSave);
+        mSavePath = intent.getStringExtra(PictureUtils.EXTRA_SAVE_PATH);
+        mIsRefresh = intent.getBooleanExtra(PictureUtils.EXTRA_REFRESH, mIsRefresh);
         return mImages != null && mImages.size() > 0;
     }
 
@@ -166,34 +167,7 @@ public class PictureBrowsActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 mImageLength.setText(String.format("%s/%s", position + 1, mImages.size()));
-                Integer status = mCurrentSaveImages.get(mImages.get(position));
-                if (status == null) {
-                    mSaveProgress.setVisibility(View.GONE);
-                    mSaveBtn.setVisibility(View.VISIBLE);
-                    mSaveBtn.setImageResource(R.drawable.picture_save_img);
-                    return;
-                }
-                switch (status) {
-                    case PictureUtils.SAVE_STATUS_DOWNLOAD:
-                        mSaveBtn.setVisibility(View.GONE);
-                        mSaveProgress.setVisibility(View.VISIBLE);
-                        break;
-                    case PictureUtils.SAVE_STATUS_SUCCESS:
-                        mSaveProgress.setVisibility(View.GONE);
-                        mSaveBtn.setVisibility(View.VISIBLE);
-                        mSaveBtn.setImageResource(R.drawable.picture_done);
-                        break;
-                    case PictureUtils.SAVE_STATUS_FAIL:
-                        mSaveProgress.setVisibility(View.GONE);
-                        mSaveBtn.setVisibility(View.VISIBLE);
-                        mSaveBtn.setImageResource(R.drawable.picture_warning);
-                        break;
-                    default:
-                        mSaveProgress.setVisibility(View.GONE);
-                        mSaveBtn.setVisibility(View.VISIBLE);
-                        mSaveBtn.setImageResource(R.drawable.picture_save_img);
-                        break;
-                }
+                saveStatusUpdateUi(position);
             }
 
             @Override
@@ -201,6 +175,44 @@ public class PictureBrowsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void saveStatusUpdateUi(int position){
+        Integer status = mCurrentSaveImages.get(mImages.get(position));
+        if (status == null) {
+            mSaveProgress.setVisibility(View.GONE);
+            mSaveBtn.setVisibility(View.VISIBLE);
+            mSaveBtn.setImageResource(R.drawable.picture_save_img);
+            return;
+        }
+        switch (status) {
+            case PictureUtils.SAVE_STATUS_DOWNLOAD:
+                mSaveBtn.setVisibility(View.GONE);
+                mSaveProgress.setVisibility(View.VISIBLE);
+                break;
+            case PictureUtils.SAVE_STATUS_SUCCESS:
+                mSaveProgress.setVisibility(View.GONE);
+                mSaveBtn.setVisibility(View.VISIBLE);
+                mSaveBtn.setImageResource(R.drawable.picture_done);
+                break;
+            case PictureUtils.SAVE_STATUS_FAIL:
+                mSaveProgress.setVisibility(View.GONE);
+                mSaveBtn.setVisibility(View.VISIBLE);
+                mSaveBtn.setImageResource(R.drawable.picture_warning);
+                break;
+            default:
+                mSaveProgress.setVisibility(View.GONE);
+                mSaveBtn.setVisibility(View.VISIBLE);
+                mSaveBtn.setImageResource(R.drawable.picture_save_img);
+                break;
+        }
+    }
+
+    private void setIsSaveFile(String url, String name){
+        File file = new File(mSavePath + name);
+        if (file.exists()){
+            mCurrentSaveImages.put(url, PictureUtils.SAVE_STATUS_SUCCESS);
+        }
     }
 
     private View getItemView(final String picturePath) {
@@ -261,10 +273,10 @@ public class PictureBrowsActivity extends AppCompatActivity {
     private void saveImage() {
         final String pictureUrl = mImages.get(mViewPager.getCurrentItem());
         String pictureName = mSaveNames.get(pictureUrl);
-        final String path = mSavePath + (TextUtils.isEmpty(pictureName) ?
-                "IMG_" + PictureUtils.getDataTimeString() + pictureUrl.substring(
-                        pictureUrl.lastIndexOf(".")) : pictureName);
+        final String path;
         if (mSaveBitmaps.get(pictureUrl) != null) {
+            path = mSavePath + (TextUtils.isEmpty(pictureName) ?
+                    "IMG_" + PictureUtils.getDataTimeString() + ".jpg" : pictureName);
             if (PictureUtils.saveImg(mSaveBitmaps.get(pictureUrl), path)) {
                 mCurrentSaveImages.put(pictureUrl, PictureUtils.SAVE_STATUS_SUCCESS);
                 mSaveProgress.setVisibility(View.GONE);
@@ -283,6 +295,9 @@ public class PictureBrowsActivity extends AppCompatActivity {
                 }
             }
         } else {
+            path = mSavePath + (TextUtils.isEmpty(pictureName) ?
+                    "IMG_" + PictureUtils.getDataTimeString() + pictureUrl.substring(
+                            pictureUrl.lastIndexOf(".")) : pictureName);
             mCurrentSaveImages.put(pictureUrl, PictureUtils.SAVE_STATUS_DOWNLOAD);
             mSaveBtn.setVisibility(View.GONE);
             mSaveProgress.setVisibility(View.VISIBLE);
@@ -303,11 +318,9 @@ public class PictureBrowsActivity extends AppCompatActivity {
 
     private void downloadImage(String imageUrl, String path) {
         try {
-            Log.e("doris", "downloadImage: ");
-            URL url = new URL(imageUrl);
-            InputStream inputStream = url.openStream();
-            File file = new File(path);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            InputStream inputStream = new FileInputStream(Glide.with(PictureBrowsActivity.this)
+                    .asFile().load(imageUrl).submit().get());
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
             int hasRead;
             while ((hasRead = inputStream.read()) != -1) {
                 fileOutputStream.write(hasRead);
@@ -330,41 +343,49 @@ public class PictureBrowsActivity extends AppCompatActivity {
         }
     }
 
-    public void downloadImageSuccess(String imageUrl, String path){
+    public void downloadImageSuccess(String imageUrl, String path) {
         mCurrentSaveImages.put(imageUrl, PictureUtils.SAVE_STATUS_SUCCESS);
-        mSaveProgress.setVisibility(View.GONE);
-        mSaveBtn.setVisibility(View.VISIBLE);
-        mSaveBtn.setImageResource(R.drawable.picture_done);
         if (mSaveImageListener != null) {
             mSaveImageListener.onSuccess(path);
         }
+        String currentImage = mImages.get(mViewPager.getCurrentItem());
+        if (!currentImage.equals(imageUrl)) {
+            return;
+        }
+        mSaveProgress.setVisibility(View.GONE);
+        mSaveBtn.setVisibility(View.VISIBLE);
+        mSaveBtn.setImageResource(R.drawable.picture_done);
         if (mIsRefresh) {
             PictureUtils.updateMedia(PictureBrowsActivity.this, mSavePath);
         }
     }
 
-    public void downloadImageFail(String imageUrl){
+    public void downloadImageFail(String imageUrl) {
         mCurrentSaveImages.put(imageUrl, PictureUtils.SAVE_STATUS_FAIL);
-        mSaveProgress.setVisibility(View.GONE);
-        mSaveBtn.setVisibility(View.VISIBLE);
-        mSaveBtn.setImageResource(R.drawable.picture_warning);
+        String currentImage = mImages.get(mViewPager.getCurrentItem());
         if (mSaveImageListener != null) {
             mSaveImageListener.onFail();
         }
+        if (!currentImage.equals(imageUrl)) {
+            return;
+        }
+        mSaveProgress.setVisibility(View.GONE);
+        mSaveBtn.setVisibility(View.VISIBLE);
+        mSaveBtn.setImageResource(R.drawable.picture_warning);
     }
 
     private static class SaveImageHandler extends Handler {
 
         WeakReference<PictureBrowsActivity> mActivity;
 
-        SaveImageHandler(PictureBrowsActivity activity){
+        SaveImageHandler(PictureBrowsActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
             Log.e("doris", "handleMessage: ");
-            if (mActivity.get() == null || mActivity.get().isFinishing()){
+            if (mActivity.get() == null || mActivity.get().isFinishing()) {
                 return;
             }
             String imageUrl = msg.getData().getString(PictureUtils.EXTRA_IMAGE_URL);

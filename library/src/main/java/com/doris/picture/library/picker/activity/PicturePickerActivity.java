@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.doris.picture.library.R;
-import com.doris.picture.library.utils.PictureUtils;
+import com.doris.picture.library.PictureUtils;
 import com.doris.picture.library.picker.activity.base.BasePreviewActivity;
 import com.doris.picture.library.picker.adapter.AlbumMediaAdapter;
 import com.doris.picture.library.picker.adapter.AlbumsAdapter;
