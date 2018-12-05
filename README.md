@@ -88,11 +88,11 @@
     .crop(true)
     // 是否需要圆形裁剪(默认false不需要)
     .cropIsOval(true)
-    // 裁剪的比例
+    // 裁剪的比例(默认1：1)
     .cropWidthAndrHeight(1, 1)
-    // 图片裁剪后保存格式
+    // 图片裁剪后保存格式(默认Bitmap.CompressFormat.JPEG)
     .cropCompressFormat(Bitmap.CompressFormat.JPEG)
-    // 图片裁剪后保存的清晰度(0-100)
+    // 图片裁剪后保存的清晰度(取值0-100，默认80)
     .cropQuality(80)
     // 指定裁剪图片Uri(选择图片裁剪不需要设置此项)
     .cropUri(uri)
