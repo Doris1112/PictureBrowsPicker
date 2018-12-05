@@ -20,4 +20,17 @@
         android:onClick="onMainViewClicked"
         android:text="选择图片" />
 
+    <Button
+        android:id="@+id/picturePickerCrop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onMainViewClicked"
+        android:text="选择图片裁剪" />
+
+    <TextView
+        android:id="@+id/pictureList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
 </LinearLayout>

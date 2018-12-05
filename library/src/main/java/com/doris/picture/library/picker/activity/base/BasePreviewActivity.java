@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.doris.picture.library.PictureUtils;
 import com.doris.picture.library.R;
 import com.doris.picture.library.picker.adapter.PreviewPagerAdapter;
 import com.doris.picture.library.picker.entity.IncapableCause;
@@ -33,12 +34,6 @@ import com.doris.picture.library.picker.widget.IncapableDialog;
  */
 public abstract class BasePreviewActivity extends AppCompatActivity implements View.OnClickListener,
         ViewPager.OnPageChangeListener, OnFragmentInteractionListener {
-
-    public static final String EXTRA_DEFAULT_BUNDLE = "extra_default_bundle";
-    public static final String EXTRA_RESULT_BUNDLE = "extra_result_bundle";
-    public static final String EXTRA_RESULT_APPLY = "extra_result_apply";
-    public static final String EXTRA_RESULT_ORIGINAL_ENABLE = "extra_result_original_enable";
-    public static final String CHECK_STATE = "checkState";
 
     protected final SelectedItemCollection mSelectedCollection = new SelectedItemCollection(this);
     protected SelectionSpec mSpec;
@@ -70,11 +65,11 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
         mSpec = SelectionSpec.getInstance();
 
         if (savedInstanceState == null) {
-            mSelectedCollection.onCreate(getIntent().getBundleExtra(EXTRA_DEFAULT_BUNDLE));
-            mOriginalEnable = getIntent().getBooleanExtra(EXTRA_RESULT_ORIGINAL_ENABLE, false);
+            mSelectedCollection.onCreate(getIntent().getBundleExtra(PictureUtils.EXTRA_DEFAULT_BUNDLE));
+            mOriginalEnable = getIntent().getBooleanExtra(PictureUtils.EXTRA_RESULT_ORIGINAL_ENABLE, false);
         } else {
             mSelectedCollection.onCreate(savedInstanceState);
-            mOriginalEnable = savedInstanceState.getBoolean(CHECK_STATE);
+            mOriginalEnable = savedInstanceState.getBoolean(PictureUtils.CHECK_STATE);
         }
 
         initWidget();
@@ -200,7 +195,6 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
         }
 
         mIsToolbarHide = !mIsToolbarHide;
-
     }
 
     @Override
@@ -318,9 +312,9 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
 
     protected void sendBackResult(boolean apply) {
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_RESULT_BUNDLE, mSelectedCollection.getDataWithBundle());
-        intent.putExtra(EXTRA_RESULT_APPLY, apply);
-        intent.putExtra(EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
+        intent.putExtra(PictureUtils.EXTRA_RESULT_BUNDLE, mSelectedCollection.getDataWithBundle());
+        intent.putExtra(PictureUtils.EXTRA_RESULT_APPLY, apply);
+        intent.putExtra(PictureUtils.EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
         setResult(Activity.RESULT_OK, intent);
     }
 

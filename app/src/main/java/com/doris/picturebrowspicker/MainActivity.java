@@ -1,16 +1,23 @@
 package com.doris.picturebrowspicker;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.doris.picture.library.brows.listener.SaveImageListener;
 import com.doris.picture.library.brows.PictureBrows;
+import com.doris.picture.library.picker.engine.GlideEngine;
 import com.doris.picture.library.picker.entity.PicturePickerMediaType;
-import com.doris.picture.library.picker.utils.PicturePicker;
+import com.doris.picture.library.picker.PicturePicker;
+import com.doris.picture.library.picker.filter.GifSizeFilter;
+import com.doris.picture.library.picker.listener.OnCheckedListener;
+import com.doris.picture.library.picker.listener.OnSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_PICTURE_PICKER = 1001;
 
+    private TextView mPictures;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mPictures = findViewById(R.id.pictureList);
     }
 
     public void onMainViewClicked(View view) {
@@ -74,9 +85,17 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.picturePicker:
                 PicturePicker.from(this)
-                        .choose(PicturePickerMediaType.ofImage(), true)
+                        .choose(PicturePickerMediaType.ofImage())
                         .countable(true)
-                        .maxSelectable(4)
+                        .maxSelectable(9)
+                        .forResult(REQUEST_PICTURE_PICKER);
+                break;
+            case R.id.picturePickerCrop:
+                PicturePicker.from(this)
+                        .choose(PicturePickerMediaType.ofImage())
+                        .capture(true)
+                        .crop(true)
+                        .countable(false)
                         .forResult(REQUEST_PICTURE_PICKER);
                 break;
             default:
@@ -124,10 +143,11 @@ public class MainActivity extends AppCompatActivity {
             // 选择图片
             List<Uri> uris = PicturePicker.obtainResult(data);
             List<String> paths = PicturePicker.obtainPathResult(data);
-            Log.d(TAG, "onActivityResult: uris.size()=" + uris.size() +
-                    ", paths.size()=" + paths.size());
+            mPictures.setText(String.format("uri.size=%s, paths.size=%s", uris.size(), paths.size()));
+            mPictures.append("\n");
             for (String path : paths) {
-                Log.d(TAG, "onActivityResult: " + path);
+                mPictures.append(path);
+                mPictures.append("\n");
             }
         }
     }

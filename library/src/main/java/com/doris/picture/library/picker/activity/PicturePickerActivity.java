@@ -1,7 +1,9 @@
 package com.doris.picture.library.picker.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
@@ -10,6 +12,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +23,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.doris.picture.library.R;
 import com.doris.picture.library.PictureUtils;
+import com.doris.picture.library.brows.activity.PictureBrowsActivity;
 import com.doris.picture.library.picker.activity.base.BasePreviewActivity;
 import com.doris.picture.library.picker.adapter.AlbumMediaAdapter;
 import com.doris.picture.library.picker.adapter.AlbumsAdapter;
@@ -50,14 +56,6 @@ public class PicturePickerActivity extends AppCompatActivity implements
         AlbumMediaAdapter.CheckStateListener, AlbumMediaAdapter.OnMediaClickListener,
         AlbumMediaAdapter.OnPhotoCapture {
 
-    public static final String EXTRA_RESULT_SELECTION = "extra_result_selection",
-            EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path",
-            EXTRA_RESULT_SELECTION_ITEM = "extra_result_selection_item",
-            EXTRA_RESULT_ORIGINAL_ENABLE = "extra_result_original_enable",
-            CHECK_STATE = "check_state";
-    private static final int REQUEST_CODE_PREVIEW = 23,
-            REQUEST_CODE_CAPTURE = 24,
-            REQUEST_CODE_CROP = 25;
     private final AlbumCollection mAlbumCollection = new AlbumCollection();
     private MediaStoreCompat mMediaStoreCompat;
     private SelectedItemCollection mSelectedCollection = new SelectedItemCollection(this);
@@ -81,10 +79,6 @@ public class PicturePickerActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_picker);
 
-        if (mSpec.capture) {
-            mMediaStoreCompat = new MediaStoreCompat(this);
-        }
-
         Toolbar toolbar = findViewById(R.id.picture_picker_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -95,6 +89,10 @@ public class PicturePickerActivity extends AppCompatActivity implements
         int color = ta.getColor(0, 0);
         ta.recycle();
         navigationIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+        if (mSpec.capture) {
+            mMediaStoreCompat = new MediaStoreCompat(this);
+        }
 
         mButtonPreview = findViewById(R.id.picture_picker_btn_preview);
         mButtonApply = findViewById(R.id.picture_picker_btn_apply);
@@ -109,7 +107,7 @@ public class PicturePickerActivity extends AppCompatActivity implements
 
         mSelectedCollection.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            mOriginalEnable = savedInstanceState.getBoolean(CHECK_STATE);
+            mOriginalEnable = savedInstanceState.getBoolean(PictureUtils.CHECK_STATE);
         }
         mSelectedCollection.setDefaultSelection(mSpec.selectorList);
         updateBottomToolbar();
@@ -130,7 +128,7 @@ public class PicturePickerActivity extends AppCompatActivity implements
         super.onSaveInstanceState(outState);
         mSelectedCollection.onSaveInstanceState(outState);
         mAlbumCollection.onSaveInstanceState(outState);
-        outState.putBoolean(CHECK_STATE, mOriginalEnable);
+        outState.putBoolean(PictureUtils.CHECK_STATE, mOriginalEnable);
     }
 
     @Override
@@ -162,13 +160,13 @@ public class PicturePickerActivity extends AppCompatActivity implements
         if (resultCode != RESULT_OK) {
             return;
         }
-        if (requestCode == REQUEST_CODE_PREVIEW) {
-            Bundle resultBundle = data.getBundleExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
+        if (requestCode == PictureUtils.REQUEST_CODE_PREVIEW) {
+            Bundle resultBundle = data.getBundleExtra(PictureUtils.EXTRA_RESULT_BUNDLE);
             ArrayList<Item> selected = resultBundle.getParcelableArrayList(SelectedItemCollection.STATE_SELECTION);
-            mOriginalEnable = data.getBooleanExtra(BasePreviewActivity.EXTRA_RESULT_ORIGINAL_ENABLE, false);
+            mOriginalEnable = data.getBooleanExtra(PictureUtils.EXTRA_RESULT_ORIGINAL_ENABLE, false);
             int collectionType = resultBundle.getInt(SelectedItemCollection.STATE_COLLECTION_TYPE,
                     SelectedItemCollection.COLLECTION_UNDEFINED);
-            if (data.getBooleanExtra(BasePreviewActivity.EXTRA_RESULT_APPLY, false)) {
+            if (data.getBooleanExtra(PictureUtils.EXTRA_RESULT_APPLY, false)) {
                 ArrayList<Uri> selectedUris = new ArrayList<>();
                 ArrayList<String> selectedPaths = new ArrayList<>();
                 if (selected != null) {
@@ -189,17 +187,17 @@ public class PicturePickerActivity extends AppCompatActivity implements
                 }
                 updateBottomToolbar();
             }
-        } else if (requestCode == REQUEST_CODE_CAPTURE) {
+        } else if (requestCode == PictureUtils.REQUEST_CODE_CAPTURE) {
             Uri uri = mMediaStoreCompat.getCurrentPhotoUri();
             String path = mMediaStoreCompat.getCurrentPhotoPath();
             if (mSpec.crop && mSpec.singleSelectionModeEnabled() && isCrop(path)) {
                 Intent intent = new Intent(this, CropActivity.class);
                 mSpec.cropUri = uri;
-                startActivityForResult(intent, REQUEST_CODE_CROP);
+                startActivityForResult(intent, PictureUtils.REQUEST_CODE_CROP);
             } else {
                 setResultFinish(uri, path);
             }
-        } else if (requestCode == REQUEST_CODE_CROP) {
+        } else if (requestCode == PictureUtils.REQUEST_CODE_CROP) {
             setResultFinish((Uri) data.getParcelableExtra(CropActivity.EXTRA_RESULT_CROP_URI),
                     data.getStringExtra(CropActivity.EXTRA_RESULT_CROP_PATH));
         }
@@ -210,13 +208,13 @@ public class PicturePickerActivity extends AppCompatActivity implements
                 isCrop(paths.get(0))) {
             Intent intent = new Intent(this, CropActivity.class);
             mSpec.cropUri = uris.get(0);
-            startActivityForResult(intent, REQUEST_CODE_CROP);
+            startActivityForResult(intent, PictureUtils.REQUEST_CODE_CROP);
         } else {
             Intent result = new Intent();
-            result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, uris);
-            result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION_ITEM, items);
-            result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, paths);
-            result.putExtra(EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
+            result.putParcelableArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION, uris);
+            result.putParcelableArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION_ITEM, items);
+            result.putStringArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION_PATH, paths);
+            result.putExtra(PictureUtils.EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
             setResult(RESULT_OK, result);
             finish();
         }
@@ -231,8 +229,8 @@ public class PicturePickerActivity extends AppCompatActivity implements
         ArrayList<String> selectedPath = new ArrayList<>();
         selectedPath.add(path);
         Intent result = new Intent();
-        result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selected);
-        result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPath);
+        result.putParcelableArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION, selected);
+        result.putStringArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION_PATH, selectedPath);
         setResult(RESULT_OK, result);
         finish();
     }
@@ -295,9 +293,9 @@ public class PicturePickerActivity extends AppCompatActivity implements
     public void onClick(View v) {
         if (v.getId() == R.id.picture_picker_btn_preview) {
             Intent intent = new Intent(this, SelectedPreviewActivity.class);
-            intent.putExtra(BasePreviewActivity.EXTRA_DEFAULT_BUNDLE, mSelectedCollection.getDataWithBundle());
-            intent.putExtra(BasePreviewActivity.EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
-            startActivityForResult(intent, REQUEST_CODE_PREVIEW);
+            intent.putExtra(PictureUtils.EXTRA_DEFAULT_BUNDLE, mSelectedCollection.getDataWithBundle());
+            intent.putExtra(PictureUtils.EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
+            startActivityForResult(intent, PictureUtils.REQUEST_CODE_PREVIEW);
         } else if (v.getId() == R.id.picture_picker_btn_apply) {
             ArrayList<Uri> selectedUris = (ArrayList<Uri>) mSelectedCollection.asListOfUri();
             ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
@@ -396,9 +394,9 @@ public class PicturePickerActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, AlbumPreviewActivity.class);
         intent.putExtra(AlbumPreviewActivity.EXTRA_ALBUM, album);
         intent.putExtra(AlbumPreviewActivity.EXTRA_ITEM, item);
-        intent.putExtra(BasePreviewActivity.EXTRA_DEFAULT_BUNDLE, mSelectedCollection.getDataWithBundle());
-        intent.putExtra(BasePreviewActivity.EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
-        startActivityForResult(intent, REQUEST_CODE_PREVIEW);
+        intent.putExtra(PictureUtils.EXTRA_DEFAULT_BUNDLE, mSelectedCollection.getDataWithBundle());
+        intent.putExtra(PictureUtils.EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
+        startActivityForResult(intent, PictureUtils.REQUEST_CODE_PREVIEW);
     }
 
     @Override
@@ -408,8 +406,34 @@ public class PicturePickerActivity extends AppCompatActivity implements
 
     @Override
     public void capture() {
-        if (mMediaStoreCompat != null) {
-            mMediaStoreCompat.dispatchCaptureIntent(this, mSpec.saveImagePath, REQUEST_CODE_CAPTURE);
+        String[] permissions = new String[]{Manifest.permission.CAMERA};
+        if (PictureUtils.checkPermissionAllGranted(this, permissions)){
+            if (mMediaStoreCompat != null) {
+                mMediaStoreCompat.dispatchCaptureIntent(this, mSpec.saveImagePath, PictureUtils.REQUEST_CODE_CAPTURE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    permissions, PictureUtils.REQUEST_CAMERA_PERMISSION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PictureUtils.REQUEST_CAMERA_PERMISSION) {
+            boolean have = true;
+            for (int item : grantResults) {
+                if (item != PackageManager.PERMISSION_GRANTED) {
+                    have = false;
+                }
+            }
+            if (have) {
+                if (mMediaStoreCompat != null) {
+                    mMediaStoreCompat.dispatchCaptureIntent(this, mSpec.saveImagePath, PictureUtils.REQUEST_CODE_CAPTURE);
+                }
+            } else {
+                Toast.makeText(this, R.string.no_permission, Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.doris.picture.library.picker.utils;
+package com.doris.picture.library.picker;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -204,7 +204,7 @@ public final class SelectionCreator {
         }
     }
 
-    public void onlyCroppForResult(int requestCode){
+    public void onlyCropForResult(int requestCode){
         Activity activity = mPicturePicker.getActivity();
         Fragment fragment = mPicturePicker.getFragment();
         if (activity == null && fragment == null) {

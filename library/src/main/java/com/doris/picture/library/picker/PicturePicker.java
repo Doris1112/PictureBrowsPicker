@@ -1,4 +1,4 @@
-package com.doris.picture.library.picker.utils;
+package com.doris.picture.library.picker;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.doris.picture.library.PictureUtils;
 import com.doris.picture.library.picker.activity.PicturePickerActivity;
 import com.doris.picture.library.picker.entity.Item;
 import com.doris.picture.library.picker.entity.PicturePickerMediaType;
@@ -45,24 +46,24 @@ public class PicturePicker {
     }
 
     public static List<Uri> obtainResult(Intent data) {
-        return data.getParcelableArrayListExtra(PicturePickerActivity.EXTRA_RESULT_SELECTION);
+        return data.getParcelableArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION);
     }
 
     public static List<Item> obtainItemResult(Intent data) {
-        return data.getParcelableArrayListExtra(PicturePickerActivity.EXTRA_RESULT_SELECTION_ITEM);
+        return data.getParcelableArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION_ITEM);
     }
 
     public static List<String> obtainPathResult(Intent data) {
-        return data.getStringArrayListExtra(PicturePickerActivity.EXTRA_RESULT_SELECTION_PATH);
+        return data.getStringArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION_PATH);
     }
 
     /**
      * 是否选择原图
-     * @param data
-     * @return
+     * @param data Intent
+     * @return boolean
      */
     public static boolean obtainOriginalState(Intent data) {
-        return data.getBooleanExtra(PicturePickerActivity.EXTRA_RESULT_ORIGINAL_ENABLE, false);
+        return data.getBooleanExtra(PictureUtils.EXTRA_RESULT_ORIGINAL_ENABLE, false);
     }
 
     public SelectionCreator choose(Set<PicturePickerMediaType> picturePickerMediaTypes) {

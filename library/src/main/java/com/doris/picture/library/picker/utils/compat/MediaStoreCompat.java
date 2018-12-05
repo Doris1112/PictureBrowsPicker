@@ -34,6 +34,11 @@ public class MediaStoreCompat {
         mFragment = null;
     }
 
+    public MediaStoreCompat(Fragment fragment) {
+        mContext = null;
+        mFragment = new WeakReference<>(fragment);
+    }
+
     public MediaStoreCompat(Activity activity, Fragment fragment) {
         mContext = new WeakReference<>(activity);
         mFragment = new WeakReference<>(fragment);
@@ -69,7 +74,7 @@ public class MediaStoreCompat {
                 }
                 if (mFragment != null) {
                     mFragment.get().startActivityForResult(captureIntent, requestCode);
-                } else {
+                } else if (mContext != null) {
                     mContext.get().startActivityForResult(captureIntent, requestCode);
                 }
             } catch (Exception e) {

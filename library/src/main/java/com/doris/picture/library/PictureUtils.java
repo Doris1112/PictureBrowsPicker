@@ -24,32 +24,43 @@ public class PictureUtils {
     /**
      * 图片浏览
      */
-    public static final int MAX_INDICATOR = 12;
-    public static final int REQUEST_WRITE_PERMISSION = 1001;
-    public static final int SAVE_STATUS_DOWNLOAD = 1;
-    public static final int SAVE_STATUS_SUCCESS = 2;
-    public static final int SAVE_STATUS_FAIL = 3;
+    public static final int MAX_INDICATOR = 12,
+            REQUEST_WRITE_PERMISSION = 1001,
+            SAVE_STATUS_DOWNLOAD = 1,
+            SAVE_STATUS_SUCCESS = 2,
+            SAVE_STATUS_FAIL = 3,
+            START_LENGTH = 4;
+    public static final String START_HTTP = "http", START_DATA = "data",
+            EXTRA_IMAGE_URL = "imageUrl",
+            EXTRA_IMAGE_PATH = "imagePath",
+            EXTRA_IMAGE = "image",
+            EXTRA_POSITION = "imagePosition",
+            EXTRA_SAVE = "imageSave",
+            EXTRA_SAVE_PATH = "imageSavePath",
+            EXTRA_SAVE_NAME = "imageSaveName",
+            EXTRA_REFRESH = "imageRefresh";
 
-    public static final String EXTRA_IMAGE_URL = "imageUrl";
-    public static final String EXTRA_IMAGE_PATH = "imagePath";
-
-    public static final String EXTRA_IMAGE = "image";
-    public static final String EXTRA_POSITION = "imagePosition";
-    public static final String EXTRA_SAVE = "imageSave";
-    public static final String EXTRA_SAVE_PATH = "imageSavePath";
-    public static final String EXTRA_SAVE_NAME = "imageSaveName";
-    public static final String EXTRA_REFRESH = "imageRefresh";
-
-    public static final int START_LENGTH = 4;
-    public static final String START_HTTP = "http";
-    public static final String START_DATA = "data";
-
+    /**
+     * 图片选择
+     */
+    public static final int REQUEST_CAMERA_PERMISSION = 1002,
+            REQUEST_CODE_PREVIEW = 1003,
+            REQUEST_CODE_CAPTURE = 1004,
+            REQUEST_CODE_CROP = 1005;
+    public static final String EXTRA_RESULT_SELECTION = "extra_result_selection",
+            EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path",
+            EXTRA_RESULT_SELECTION_ITEM = "extra_result_selection_item",
+            EXTRA_RESULT_ORIGINAL_ENABLE = "extra_result_original_enable",
+            EXTRA_DEFAULT_BUNDLE = "extra_default_bundle",
+            EXTRA_RESULT_BUNDLE = "extra_result_bundle",
+            EXTRA_RESULT_APPLY = "extra_result_apply",
+            CHECK_STATE = "check_state";
 
     /**
      * 保存图片
      *
      * @param bitmap 需要保存Bitmap
-     * @param path 保存的绝对路径
+     * @param path   保存的绝对路径
      */
     public static boolean saveImg(Bitmap bitmap, String path) {
         try {
@@ -88,7 +99,7 @@ public class PictureUtils {
     /**
      * 同步媒体库
      *
-     * @param context Context
+     * @param context  Context
      * @param filePath 图片路径
      */
     public static void updateMedia(Context context, String filePath) {
@@ -108,6 +119,7 @@ public class PictureUtils {
 
     /**
      * 获取时间格式String
+     *
      * @return String
      */
     public static String getDataTimeString() {
@@ -117,7 +129,8 @@ public class PictureUtils {
 
     /**
      * 检查是否拥有指定的所有权限
-     * @param context Context
+     *
+     * @param context     Context
      * @param permissions 权限数组
      */
     public static boolean checkPermissionAllGranted(Context context, String[] permissions) {
