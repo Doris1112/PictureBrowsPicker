@@ -24,7 +24,10 @@
     // 设置图片保存成功或失败监听
     .setSaveImageListener(new SaveImageListener() {
       @Override
-      public void onSuccess(String absolutePath) { }
+      public void onSuccess(String absolutePath) {
+        // 下载成功：absolutePath图片保存绝对路径
+        // 如果页面有滑动，成功回调是你点击过下载的图片，不一定是当前显示图片
+      }
   
       @Override
       public void onFail() { }
