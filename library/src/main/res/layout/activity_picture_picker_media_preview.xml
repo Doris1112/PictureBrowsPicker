@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.doris.picture.library.picker.widget.PreviewViewPager
+        android:id="@+id/picture_picker_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
+
+    <FrameLayout
+        android:id="@+id/picture_picker_bottom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/preview_bottom_toolbar_bg"
+        android:elevation="4dp"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:id="@+id/picture_picker_btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:foreground="?selectableItemBackground"
+            android:padding="16dp"
+            android:text="@string/button_back"
+            android:textColor="?attr/previewBottomToolbarBackTextColor"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/picture_picker_original_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:foreground="?selectableItemBackground"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:visibility="gone"
+                tools:showIn="@layout/activity_picture_picker">
+
+                <com.doris.picture.library.picker.widget.CheckRadioView
+                    android:id="@+id/picture_picker_original"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/picture_picker_radio_off"
+                    android:tint="#ffffff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:enabled="true"
+                    android:paddingLeft="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/button_original"
+                    android:textColor="?attr/previewBottomToolbarBackTextColor"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/picture_picker_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/preview_bottom_size"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/picture_picker_btn_apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:foreground="?selectableItemBackground"
+            android:padding="16dp"
+            android:textColor="?attr/previewBottomToolbarApplyTextColor"
+            android:textSize="16sp" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/picture_picker_top_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:fitsSystemWindows="true">
+
+        <com.doris.picture.library.picker.widget.CheckView
+            android:id="@+id/picture_picker_check_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp" />
+    </FrameLayout>
+</RelativeLayout>

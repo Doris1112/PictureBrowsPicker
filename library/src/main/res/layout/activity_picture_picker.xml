@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/picture_picker_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:elevation="4dp"
+        android:navigationIcon="@drawable/picture_picker_navigation"
+        android:theme="?toolbar"
+        app:navigationIcon="@drawable/picture_picker_navigation"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:id="@+id/picture_picker_selected_album"
+            android:layout_width="wrap_content"
+            android:layout_height="?actionBarSize"
+            android:drawableRight="@drawable/picture_picker_arrow_drop_down"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="?attr/albumElementColor"
+            android:textSize="18sp" />
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/picture_picker_bottom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/bottomToolbarBackground"
+        android:elevation="4dp"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:id="@+id/picture_picker_btn_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:foreground="?selectableItemBackground"
+            android:padding="16dp"
+            android:text="@string/button_preview"
+            android:textColor="?attr/bottomToolbarPreviewTextColor"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/picture_picker_original_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:foreground="?selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:visibility="visible"
+            tools:showIn="@layout/activity_picture_picker">
+
+            <com.doris.picture.library.picker.widget.CheckRadioView
+                android:id="@+id/picture_picker_original"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/picture_picker_radio_off" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:enabled="true"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:text="@string/button_original"
+                android:textColor="?attr/bottomToolbarPreviewTextColor"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/picture_picker_btn_apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:foreground="?selectableItemBackground"
+            android:padding="16dp"
+            android:textColor="?attr/bottomToolbarApplyTextColor"
+            android:textSize="16sp" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/picture_picker_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/picture_picker_bottom_toolbar"
+        android:layout_below="@id/picture_picker_toolbar"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/picture_picker_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/picture_picker_bottom_toolbar"
+        android:layout_below="@id/picture_picker_toolbar"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/empty_text"
+            android:textColor="?attr/albumEmptyViewTextColor"
+            android:textSize="16sp" />
+    </FrameLayout>
+</RelativeLayout>

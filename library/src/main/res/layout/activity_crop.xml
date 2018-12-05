@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".picker.activity.CropActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/picture_picker_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:elevation="4dp"
+        android:navigationIcon="@drawable/picture_picker_navigation"
+        android:theme="?toolbar"
+        app:navigationIcon="@drawable/picture_picker_navigation"
+        tools:targetApi="lollipop">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/crop"
+                android:textColor="?attr/albumElementColor"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/picture_picker_btn_crop"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                android:text="@string/button_sure_default"
+                android:textColor="?attr/albumElementColor"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <com.steelkiwi.cropiwa.CropIwaView
+        android:id="@+id/picture_picker_crop_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ci_dynamic_aspect_ratio="false" />
+
+</LinearLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="toolbar" format="reference"/>
+    <attr name="albumDropdownTitleColor" format="reference|color"/>
+    <attr name="albumDropdownCountColor" format="reference|color"/>
+    <attr name="albumElementColor" format="reference|color"/>
+    <attr name="albumThumbnailPlaceholder" format="reference|color"/>
+    <attr name="albumEmptyViewTextColor" format="reference|color"/>
+    <attr name="listPopupWindowStyle" format="reference"/>
+    <attr name="pageBackground" format="reference|color"/>
+    <attr name="bottomToolbarBackground" format="reference|color"/>
+    <attr name="bottomToolbarPreviewTextColor" format="reference|color"/>
+    <attr name="bottomToolbarApplyTextColor" format="reference|color"/>
+    <attr name="previewBottomToolbarBackTextColor" format="reference|color"/>
+    <attr name="previewBottomToolbarApplyTextColor" format="reference|color"/>
+    <attr name="itemPlaceholder" format="reference|color"/>
+    <attr name="itemCheckCircleBackgroundColor" format="reference|color"/>
+    <attr name="itemCheckCircleBorderColor" format="reference|color"/>
+    <attr name="captureTextColor" format="reference|color"/>
+
+</resources>
