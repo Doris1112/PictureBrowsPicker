@@ -1,4 +1,4 @@
-1、图片浏览
+## 图片浏览
 ```
   PictureBrows.build(this)
     // 设置图片or图片集合(可添加Base64图片，这个操作会清空所有图片只留下设置图片)
@@ -9,7 +9,7 @@
     .addImage(PictureData.IMAGE1)
     // 设置进入时展示第position张图片(以0开始)
     .setPosition(1)
-    // 是否可以保存图片(默认不可以保存)
+    // 是否可以保存图片(默认false不可以保存)
     .isSave(true)
     // 设置图片保存路径(以“/”结束，不包含图片名称)
     .setSavePath(PictureData.SAVE_IMGE_PATH)
@@ -36,7 +36,7 @@
     .start();
 ```
 
-2、媒体选择
+## 媒体选择
 ```
   PicturePicker.from(this)
     // 选择类型
