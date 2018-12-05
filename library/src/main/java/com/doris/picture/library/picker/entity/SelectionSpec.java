@@ -33,6 +33,7 @@ public final class SelectionSpec {
     public boolean countable, capture, originalMap, autoHideToolbar, crop, isOval, isRefresh;
     public String saveImagePath, saveCropImageName;
     public Uri cropUri;
+    public Bitmap cropBitmap;
     public int cropWidth, cropHeight, cropQuality;
     public Bitmap.CompressFormat cropCompressFormat;
     public List<Filter> filters;
@@ -77,6 +78,7 @@ public final class SelectionSpec {
         isRefresh = true;
         crop = false;
         cropUri = null;
+        cropBitmap = null;
         isOval = false;
         cropWidth = -1;
         cropHeight = -1;

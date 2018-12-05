@@ -1,17 +1,23 @@
 package com.doris.picture.library.picker.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.doris.picture.library.PictureUtils;
 import com.doris.picture.library.R;
 import com.doris.picture.library.picker.entity.SelectionSpec;
 import com.steelkiwi.cropiwa.AspectRatio;
@@ -21,9 +27,6 @@ import com.steelkiwi.cropiwa.image.CropIwaResultReceiver;
 import com.steelkiwi.cropiwa.shape.CropIwaOvalShape;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * @author Doris
@@ -31,9 +34,6 @@ import java.util.Locale;
  */
 public class CropActivity extends AppCompatActivity implements View.OnClickListener,
         CropIwaResultReceiver.Listener {
-
-    public static final String EXTRA_RESULT_CROP_PATH = "extra_crop_path",
-            EXTRA_RESULT_CROP_URI = "extra_crop_uri";
 
     private SelectionSpec mSpec;
 
@@ -54,14 +54,23 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        findViewById(R.id.picture_picker_btn_crop).setOnClickListener(this);
-
         mCropResultReceiver = new CropIwaResultReceiver();
         mCropResultReceiver.setListener(this);
         mCropResultReceiver.register(this);
 
+        TextView mBtnCrop = findViewById(R.id.picture_picker_btn_crop);
+        mBtnCrop.setOnClickListener(this);
         mCropView = findViewById(R.id.picture_picker_crop_view);
-        mCropView.setImageUri(mSpec.cropUri);
+        TextView mEmpty = findViewById(R.id.picture_picker_crop_empty);
+        if (mSpec.cropUri != null){
+            mCropView.setImageUri(mSpec.cropUri);
+        } else if (mSpec.cropBitmap != null){
+            mCropView.setImage(mSpec.cropBitmap);
+        } else {
+            mEmpty.setVisibility(View.VISIBLE);
+            mCropView.setVisibility(View.GONE);
+            mBtnCrop.setVisibility(View.GONE);
+        }
         if (mSpec.isOval) {
             mCropView.configureOverlay().setCropShape(
                     new CropIwaOvalShape(mCropView.configureOverlay()))
@@ -84,20 +93,31 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.picture_picker_btn_crop) {
-            // 裁剪
-            File file = new File(getPath());
-            mSaveCropPath = file.getAbsolutePath();
-            mCropView.crop(new CropIwaSaveConfig.Builder(Uri.fromFile(file))
-                    .setCompressFormat(mSpec.cropCompressFormat)
-                    .setQuality(mSpec.cropQuality)
-                    .build());
+            String[] permissions = new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if (PictureUtils.checkPermissionAllGranted(this, permissions)) {
+                saveCropImage();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        permissions, PictureUtils.REQUEST_WRITE_PERMISSION);
+            }
         }
+    }
+
+    private void saveCropImage(){
+        // 裁剪
+        File file = new File(getPath());
+        mSaveCropPath = file.getAbsolutePath();
+        mCropView.crop(new CropIwaSaveConfig.Builder(Uri.fromFile(file))
+                .setCompressFormat(mSpec.cropCompressFormat)
+                .setQuality(mSpec.cropQuality)
+                .build());
     }
 
     private String getPath() {
         String path = mSpec.saveImagePath;
         if (TextUtils.isEmpty(mSpec.saveCropImageName)) {
-            path += "IMG_" + getDataTime();
+            path += "IMG_" + PictureUtils.getDataTimeString();
             switch (mSpec.cropCompressFormat) {
                 case PNG:
                     path += ".png";
@@ -117,9 +137,22 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         return path;
     }
 
-    private static String getDataTime() {
-        return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
-                .format(new Date());
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PictureUtils.REQUEST_WRITE_PERMISSION) {
+            boolean have = true;
+            for (int item : grantResults) {
+                if (item != PackageManager.PERMISSION_GRANTED) {
+                    have = false;
+                }
+            }
+            if (have) {
+                saveCropImage();
+            } else {
+                Toast.makeText(this, R.string.no_permission, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
@@ -131,8 +164,8 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onCropSuccess(Uri croppedUri) {
         Intent result = new Intent();
-        result.putExtra(EXTRA_RESULT_CROP_PATH, mSaveCropPath);
-        result.putExtra(EXTRA_RESULT_CROP_URI, croppedUri);
+        result.putExtra(PictureUtils.EXTRA_RESULT_CROP_PATH, mSaveCropPath);
+        result.putExtra(PictureUtils.EXTRA_RESULT_CROP_URI, croppedUri);
         setResult(Activity.RESULT_OK, result);
         finish();
     }

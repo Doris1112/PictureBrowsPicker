@@ -25,11 +25,16 @@ public class PictureUtils {
      * 图片浏览
      */
     public static final int MAX_INDICATOR = 12,
-            REQUEST_WRITE_PERMISSION = 1001,
             SAVE_STATUS_DOWNLOAD = 1,
             SAVE_STATUS_SUCCESS = 2,
             SAVE_STATUS_FAIL = 3,
-            START_LENGTH = 4;
+            START_LENGTH = 4,
+            REQUEST_WRITE_PERMISSION = 1001,
+            REQUEST_READ_PERMISSION = 1002,
+            REQUEST_CAMERA_PERMISSION = 1003,
+            REQUEST_CODE_PREVIEW = 1004,
+            REQUEST_CODE_CAPTURE = 1005,
+            REQUEST_CODE_CROP = 1006;;
     public static final String START_HTTP = "http", START_DATA = "data",
             EXTRA_IMAGE_URL = "imageUrl",
             EXTRA_IMAGE_PATH = "imagePath",
@@ -38,23 +43,17 @@ public class PictureUtils {
             EXTRA_SAVE = "imageSave",
             EXTRA_SAVE_PATH = "imageSavePath",
             EXTRA_SAVE_NAME = "imageSaveName",
-            EXTRA_REFRESH = "imageRefresh";
-
-    /**
-     * 图片选择
-     */
-    public static final int REQUEST_CAMERA_PERMISSION = 1002,
-            REQUEST_CODE_PREVIEW = 1003,
-            REQUEST_CODE_CAPTURE = 1004,
-            REQUEST_CODE_CROP = 1005;
-    public static final String EXTRA_RESULT_SELECTION = "extra_result_selection",
+            EXTRA_REFRESH = "imageRefresh",
+            EXTRA_RESULT_SELECTION = "extra_result_selection",
             EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path",
             EXTRA_RESULT_SELECTION_ITEM = "extra_result_selection_item",
             EXTRA_RESULT_ORIGINAL_ENABLE = "extra_result_original_enable",
             EXTRA_DEFAULT_BUNDLE = "extra_default_bundle",
             EXTRA_RESULT_BUNDLE = "extra_result_bundle",
             EXTRA_RESULT_APPLY = "extra_result_apply",
-            CHECK_STATE = "check_state";
+            CHECK_STATE = "check_state",
+            EXTRA_RESULT_CROP_PATH = "extra_crop_path",
+            EXTRA_RESULT_CROP_URI = "extra_crop_uri";
 
     /**
      * 保存图片

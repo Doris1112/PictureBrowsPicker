@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.doris.picture.library.PictureUtils;
-import com.doris.picture.library.picker.activity.PicturePickerActivity;
 import com.doris.picture.library.picker.entity.Item;
 import com.doris.picture.library.picker.entity.PicturePickerMediaType;
 
@@ -57,6 +56,14 @@ public class PicturePicker {
         return data.getStringArrayListExtra(PictureUtils.EXTRA_RESULT_SELECTION_PATH);
     }
 
+    public static Uri obtainCropResult(Intent data) {
+        return data.getParcelableExtra(PictureUtils.EXTRA_RESULT_CROP_URI);
+    }
+
+    public static String obtainCropPathResult(Intent data) {
+        return data.getStringExtra(PictureUtils.EXTRA_RESULT_CROP_PATH);
+    }
+
     /**
      * 是否选择原图
      * @param data Intent
@@ -64,6 +71,10 @@ public class PicturePicker {
      */
     public static boolean obtainOriginalState(Intent data) {
         return data.getBooleanExtra(PictureUtils.EXTRA_RESULT_ORIGINAL_ENABLE, false);
+    }
+
+    public SelectionCreator crop() {
+        return this.choose(null, true);
     }
 
     public SelectionCreator choose(Set<PicturePickerMediaType> picturePickerMediaTypes) {

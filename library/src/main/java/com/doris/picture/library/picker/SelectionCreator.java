@@ -36,7 +36,7 @@ public final class SelectionCreator {
     private final PicturePicker mPicturePicker;
     private final SelectionSpec mSelectionSpec;
 
-    SelectionCreator(PicturePicker picturePicker, @NonNull Set<PicturePickerMediaType> picturePickerMediaTypes, boolean mediaTypeExclusive) {
+    SelectionCreator(PicturePicker picturePicker, Set<PicturePickerMediaType> picturePickerMediaTypes, boolean mediaTypeExclusive) {
         mPicturePicker = picturePicker;
         mSelectionSpec = SelectionSpec.getCleanInstance();
         mSelectionSpec.picturePickerMediaTypeSet = picturePickerMediaTypes;
@@ -95,6 +95,11 @@ public final class SelectionCreator {
 
     public SelectionCreator cropUri(Uri uri) {
         mSelectionSpec.cropUri = uri;
+        return this;
+    }
+
+    public SelectionCreator cropBitmap(Bitmap bitmap) {
+        mSelectionSpec.cropBitmap = bitmap;
         return this;
     }
 

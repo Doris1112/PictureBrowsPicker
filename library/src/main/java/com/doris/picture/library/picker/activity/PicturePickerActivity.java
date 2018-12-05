@@ -25,10 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.doris.picture.library.R;
 import com.doris.picture.library.PictureUtils;
-import com.doris.picture.library.brows.activity.PictureBrowsActivity;
-import com.doris.picture.library.picker.activity.base.BasePreviewActivity;
+import com.doris.picture.library.R;
 import com.doris.picture.library.picker.adapter.AlbumMediaAdapter;
 import com.doris.picture.library.picker.adapter.AlbumsAdapter;
 import com.doris.picture.library.picker.entity.Album;
@@ -118,9 +116,19 @@ public class PicturePickerActivity extends AppCompatActivity implements
         mAlbumsSpinner.setSelectedTextView((TextView) findViewById(R.id.picture_picker_selected_album));
         mAlbumsSpinner.setPopupAnchorView(toolbar);
         mAlbumsSpinner.setAdapter(mAlbumsAdapter);
+
         mAlbumCollection.onCreate(this, this);
         mAlbumCollection.onRestoreInstanceState(savedInstanceState);
-        mAlbumCollection.loadAlbums();
+
+        String[] permissions = new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE};
+        if (PictureUtils.checkPermissionAllGranted(this,
+                permissions)) {
+            mAlbumCollection.loadAlbums();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    permissions, PictureUtils.REQUEST_READ_PERMISSION);
+        }
     }
 
     @Override
@@ -198,8 +206,8 @@ public class PicturePickerActivity extends AppCompatActivity implements
                 setResultFinish(uri, path);
             }
         } else if (requestCode == PictureUtils.REQUEST_CODE_CROP) {
-            setResultFinish((Uri) data.getParcelableExtra(CropActivity.EXTRA_RESULT_CROP_URI),
-                    data.getStringExtra(CropActivity.EXTRA_RESULT_CROP_PATH));
+            setResultFinish((Uri) data.getParcelableExtra(PictureUtils.EXTRA_RESULT_CROP_URI),
+                    data.getStringExtra(PictureUtils.EXTRA_RESULT_CROP_PATH));
         }
     }
 
@@ -406,8 +414,9 @@ public class PicturePickerActivity extends AppCompatActivity implements
 
     @Override
     public void capture() {
-        String[] permissions = new String[]{Manifest.permission.CAMERA};
-        if (PictureUtils.checkPermissionAllGranted(this, permissions)){
+        String[] permissions = new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (PictureUtils.checkPermissionAllGranted(this, permissions)) {
             if (mMediaStoreCompat != null) {
                 mMediaStoreCompat.dispatchCaptureIntent(this, mSpec.saveImagePath, PictureUtils.REQUEST_CODE_CAPTURE);
             }
@@ -420,20 +429,27 @@ public class PicturePickerActivity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PictureUtils.REQUEST_CAMERA_PERMISSION) {
-            boolean have = true;
-            for (int item : grantResults) {
-                if (item != PackageManager.PERMISSION_GRANTED) {
-                    have = false;
-                }
+        boolean have = true;
+        for (int item : grantResults) {
+            if (item != PackageManager.PERMISSION_GRANTED) {
+                have = false;
             }
-            if (have) {
+        }
+        if (!have){
+            Toast.makeText(this, R.string.no_permission, Toast.LENGTH_LONG).show();
+            return;
+        }
+        switch (requestCode) {
+            case PictureUtils.REQUEST_CAMERA_PERMISSION:
                 if (mMediaStoreCompat != null) {
                     mMediaStoreCompat.dispatchCaptureIntent(this, mSpec.saveImagePath, PictureUtils.REQUEST_CODE_CAPTURE);
                 }
-            } else {
-                Toast.makeText(this, R.string.no_permission, Toast.LENGTH_LONG).show();
-            }
+                break;
+            case PictureUtils.REQUEST_READ_PERMISSION:
+                mAlbumCollection.loadAlbums();
+                break;
+            default:
+                break;
         }
     }
 }
