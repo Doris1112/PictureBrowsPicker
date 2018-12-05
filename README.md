@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/Doris1112/PictureBrowsPicker.svg)](https://jitpack.io/#Doris1112/PictureBrowsPicker)
+
 ## 图片浏览
 ```
   PictureBrows.build(this)
