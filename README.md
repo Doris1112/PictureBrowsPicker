@@ -1,5 +1,9 @@
 [![](https://jitpack.io/v/Doris1112/PictureBrowsPicker.svg)](https://jitpack.io/#Doris1112/PictureBrowsPicker)
 
+图片选择 Matisse（https://github.com/zhihu/Matisse）
+图片裁剪 cropiwa（https://github.com/steelkiwi/cropiwa）
+
+
 ## 图片浏览
 ```
   PictureBrows.build(this)
