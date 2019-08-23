@@ -1,3 +1,9 @@
+[![](https://jitpack.io/v/Doris1112/PictureBrowsPicker.svg)](https://jitpack.io/#Doris1112/PictureBrowsPicker)
+
+图片选择 Matisse（https://github.com/zhihu/Matisse）
+图片裁剪 cropiwa（https://github.com/steelkiwi/cropiwa）
+
+
 ## 图片浏览
 ```
   PictureBrows.build(this)
@@ -100,6 +106,54 @@
     .cropSaveName("temp.jpg")
     // 裁剪图片后保存成功是否需要刷新媒体库(默认true刷新)
     .isRefresh(true)
-    // 跳转
+    // 跳转必须是forResult
     .forResult(REQUEST_PICTURE_PICKER);
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK &&　requestCode == REQUEST_PICTURE_PICKER) {
+            // 选中媒体
+            List<Uri> uris = PicturePicker.obtainResult(data);
+            List<String> paths = PicturePicker.obtainPathResult(data);
+            List<Item> items = PicturePicker.obtainItemResult(data);
+        }
+    }
+```
+
+## 图片裁剪
+```
+  PicturePicker.from(this)
+    // 只裁剪图片
+    .crop()
+    // 裁剪图片Uri
+    .cropUri(uri)
+    // 裁剪图片Bitmap(如果设置了Uri，此设置无效)
+    .cropBitmap(bitmap)
+    // 是否需要圆形裁剪(默认false不需要)
+    .cropIsOval(true)
+    // 裁剪的比例(默认1：1)
+    .cropWidthAndrHeight(1, 1)
+    // 图片裁剪后保存格式(默认Bitmap.CompressFormat.JPEG)
+    .cropCompressFormat(Bitmap.CompressFormat.JPEG)
+    // 图片裁剪后保存的清晰度(取值0-100，默认80)
+    .cropQuality(80)
+    // 指定裁剪图片Uri(选择图片裁剪不需要设置此项)
+    .cropUri(uri)
+    // 设置裁剪图片保存名称(以“.图片格式”结束，不包含图片路径)
+    .cropSaveName("temp.jpg")
+    // 裁剪图片后保存成功是否需要刷新媒体库(默认true刷新)
+    .isRefresh(true)
+    // 跳转必须是onlyCropForResult
+    .onlyCropForResult(REQUEST_PICTURE_CROP);
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK &&　requestCode == REQUEST_PICTURE_CROP) {
+            // 裁剪成功
+            Uri uri = PicturePicker.obtainCropResult(data);
+            String path = PicturePicker.obtainCropPathResult(data);
+        }
+    }
 ```
