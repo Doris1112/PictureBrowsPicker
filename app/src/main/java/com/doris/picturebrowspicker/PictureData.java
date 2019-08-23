@@ -20,5 +20,5 @@ import android.os.Environment;
     static final String IMAGE8 = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1543829478221&di=73dc1f344a0de8532083abda46344f51&imgtype=0&src=http%3A%2F%2Fbbsfiles.vivo.com.cn%2Fvivobbs%2Fattachment%2Fforum%2F201811%2F12%2F224620bzvfgqiyyvja3y3r.jpg";
     static final String IMAGE9 = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1543829478208&di=a931c41457ead61fe983475d6d9f8122&imgtype=0&src=http%3A%2F%2Fbpic.wotucdn.com%2F18%2F76%2F98%2F18769875-0ce0d66f5dbe7ba2cc554219edd457d9-3.jpg";
 
-    static final String SAVE_IMG_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera/";
+    static final String SAVE_IMG_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/";
 }

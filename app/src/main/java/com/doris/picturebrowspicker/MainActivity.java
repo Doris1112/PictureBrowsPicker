@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.doris.picture.library.brows.PictureBrows;
 import com.doris.picture.library.picker.PicturePicker;
-import com.doris.picture.library.picker.entity.Item;
 import com.doris.picture.library.picker.entity.PicturePickerMediaType;
 
 import java.util.ArrayList;
@@ -113,9 +112,8 @@ public class MainActivity extends AppCompatActivity {
             // 选择图片
             List<Uri> uris = PicturePicker.obtainResult(data);
             List<String> paths = PicturePicker.obtainPathResult(data);
-            List<Item> items = PicturePicker.obtainItemResult(data);
-            mPictures.setText(String.format("uri.size=%s, paths.size=%s, items.size=%s",
-                    uris.size(), paths.size(), items.size()));
+            mPictures.setText(String.format("uri.size=%s, paths.size=%s",
+                    uris.size(), paths.size()));
             mPictures.append("\n");
             if (uris.size() > 0){
                 uri = uris.get(0);

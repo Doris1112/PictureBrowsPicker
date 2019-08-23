@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 
@@ -105,9 +104,7 @@ public class PictureUtils {
      */
     public static void updateMedia(final Context context, String filePath) {
         try {
-            String[] paths = new String[]{Environment.getExternalStorageDirectory().toString(),
-                    filePath};
-            MediaScannerConnection.scanFile(context, paths, null,
+            MediaScannerConnection.scanFile(context, new String[]{filePath}, null,
                     new MediaScannerConnection.OnScanCompletedListener(){
                         @Override
                         public void onScanCompleted(String path, Uri uri) {

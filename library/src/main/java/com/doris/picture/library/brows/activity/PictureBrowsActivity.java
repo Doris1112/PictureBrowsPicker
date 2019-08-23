@@ -286,7 +286,7 @@ public class PictureBrowsActivity extends AppCompatActivity {
                     mSaveImageListener.onSuccess(path);
                 }
                 if (mIsRefresh) {
-                    PictureUtils.updateMedia(PictureBrowsActivity.this, mSavePath);
+                    PictureUtils.updateMedia(PictureBrowsActivity.this, path);
                 }
             } else {
                 mCurrentSaveImages.put(pictureUrl, PictureUtils.SAVE_STATUS_FAIL);
@@ -359,7 +359,7 @@ public class PictureBrowsActivity extends AppCompatActivity {
         mSaveBtn.setVisibility(View.VISIBLE);
         mSaveBtn.setImageResource(R.drawable.picture_done);
         if (mIsRefresh) {
-            PictureUtils.updateMedia(PictureBrowsActivity.this, mSavePath);
+            PictureUtils.updateMedia(PictureBrowsActivity.this, path);
         }
     }
 
