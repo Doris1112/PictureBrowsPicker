@@ -12,8 +12,11 @@
     <attr name="bottomToolbarBackground" format="reference|color"/>
     <attr name="bottomToolbarPreviewTextColor" format="reference|color"/>
     <attr name="bottomToolbarApplyTextColor" format="reference|color"/>
+    <attr name="previewPageBackground" format="reference|color"/>
+    <attr name="previewBottomToolbarBackground" format="reference|color"/>
     <attr name="previewBottomToolbarBackTextColor" format="reference|color"/>
     <attr name="previewBottomToolbarApplyTextColor" format="reference|color"/>
+    <attr name="previewBottomSizeTextColor" format="reference|color"/>
     <attr name="itemPlaceholder" format="reference|color"/>
     <attr name="itemCheckCircleBackgroundColor" format="reference|color"/>
     <attr name="itemCheckCircleBorderColor" format="reference|color"/>

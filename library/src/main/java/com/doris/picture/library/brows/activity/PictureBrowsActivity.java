@@ -285,6 +285,9 @@ public class PictureBrowsActivity extends AppCompatActivity {
                 if (mSaveImageListener != null) {
                     mSaveImageListener.onSuccess(path);
                 }
+                if (mIsRefresh) {
+                    PictureUtils.updateMedia(PictureBrowsActivity.this, mSavePath);
+                }
             } else {
                 mCurrentSaveImages.put(pictureUrl, PictureUtils.SAVE_STATUS_FAIL);
                 mSaveProgress.setVisibility(View.GONE);

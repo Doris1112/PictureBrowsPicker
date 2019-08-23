@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 PictureBrows.build(this)
                         .setImages(getImages())
                         .isSave(true)
-                        .setSavePath(PictureData.SAVE_IMGE_PATH)
+                        .setSavePath(PictureData.SAVE_IMG_PATH)
                         .setNames(getNames())
                         .start();
                 break;

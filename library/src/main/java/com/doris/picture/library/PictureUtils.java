@@ -1,6 +1,7 @@
 package com.doris.picture.library;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,7 +35,8 @@ public class PictureUtils {
             REQUEST_CAMERA_PERMISSION = 1003,
             REQUEST_CODE_PREVIEW = 1004,
             REQUEST_CODE_CAPTURE = 1005,
-            REQUEST_CODE_CROP = 1006;;
+            REQUEST_CODE_CROP = 1006;
+    ;
     public static final String START_HTTP = "http", START_DATA = "data",
             EXTRA_IMAGE_URL = "imageUrl",
             EXTRA_IMAGE_PATH = "imagePath",
@@ -101,14 +103,16 @@ public class PictureUtils {
      * @param context  Context
      * @param filePath 图片路径
      */
-    public static void updateMedia(Context context, String filePath) {
+    public static void updateMedia(final Context context, String filePath) {
         try {
-            String[] paths = new String[]{Environment.getExternalStorageDirectory().toString()};
-            MediaScannerConnection.scanFile(context, paths, null, null);
-            MediaScannerConnection.scanFile(context, new String[]{filePath},
-                    null, new MediaScannerConnection.OnScanCompletedListener() {
+            String[] paths = new String[]{Environment.getExternalStorageDirectory().toString(),
+                    filePath};
+            MediaScannerConnection.scanFile(context, paths, null,
+                    new MediaScannerConnection.OnScanCompletedListener(){
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
+                            context.sendBroadcast(new Intent(
+                                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
                         }
                     });
         } catch (Exception e) {
