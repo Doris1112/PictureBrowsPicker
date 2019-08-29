@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
                 // 浏览图片
                 PictureBrows.build(this)
                         .setImages(getImages())
-                        .isSave(true)
                         .setSavePath(PictureData.SAVE_IMG_PATH)
                         .setNames(getNames())
                         .start();

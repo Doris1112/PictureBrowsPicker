@@ -178,6 +178,9 @@ public class PictureBrowsActivity extends AppCompatActivity {
     }
 
     private void saveStatusUpdateUi(int position){
+        if (!mIsSave){
+            return;
+        }
         Integer status = mCurrentSaveImages.get(mImages.get(position));
         if (status == null) {
             mSaveProgress.setVisibility(View.GONE);
