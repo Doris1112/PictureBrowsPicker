@@ -48,7 +48,7 @@
     // 选择类型
     // PicturePickerMediaType.ofImage() 图片
     // PicturePickerMediaType.ofVideo() 视频
-    // PicturePickerMediaType.ofAll() 视频
+    // PicturePickerMediaType.ofAll() 全部
     .choose(PicturePickerMediaType.ofAll())
     // 更改主题
     .theme(R.style.xxx)
