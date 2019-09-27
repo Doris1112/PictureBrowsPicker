@@ -56,6 +56,10 @@ public enum  PicturePickerMediaType {
         return EnumSet.of(JPEG, PNG, GIF, BMP, WEBP);
     }
 
+    public static Set<PicturePickerMediaType> ofImageNotGif() {
+        return EnumSet.of(JPEG, PNG, BMP, WEBP);
+    }
+
     public static Set<PicturePickerMediaType> ofVideo() {
         return EnumSet.of(MPEG, MP4, QUICKTIME, THREEGPP, THREEGPP2, MKV, WEBM, TS, AVI);
     }

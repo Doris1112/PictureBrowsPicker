@@ -35,7 +35,6 @@ public class PictureUtils {
             REQUEST_CODE_PREVIEW = 1004,
             REQUEST_CODE_CAPTURE = 1005,
             REQUEST_CODE_CROP = 1006;
-    ;
     public static final String START_HTTP = "http", START_DATA = "data",
             EXTRA_IMAGE_URL = "imageUrl",
             EXTRA_IMAGE_PATH = "imagePath",
