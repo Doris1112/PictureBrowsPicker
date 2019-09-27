@@ -47,6 +47,7 @@
   PicturePicker.from(this)
     // 选择类型
     // PicturePickerMediaType.ofImage() 图片
+    // PicturePickerMediaType.ofImageNotGif() 图片不包含Gif
     // PicturePickerMediaType.ofVideo() 视频
     // PicturePickerMediaType.ofAll() 全部
     .choose(PicturePickerMediaType.ofAll())
